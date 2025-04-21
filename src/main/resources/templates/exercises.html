@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Моите упражнения</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<h2>Моите упражнения</h2>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Име на упражнението</th>
+        <th>Повторения</th>
+        <th>Дата</th>
+        <th>Действие</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="exercise : ${exercises}">
+        <td th:text="${exercise.name}">Име</td>
+        <td th:text="${exercise.repetitions}">Повторения</td>
+        <td th:text="${exercise.date}">Дата</td>
+        <td>
+            <form th:action="@{/exercises/delete/{id}(id=${exercise.id}, token=${token})}" method="post">
+                <button type="submit">🗑</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br><br>
+
+<h3>Добави ново упражнение</h3>
+
+<form th:action="@{/exercises/add(token=${token})}" method="post">
+    <label>Име:</label>
+    <input type="text" name="name" required><br><br>
+
+    <label>Повторения:</label>
+    <input type="number" name="repetitions" required><br><br>
+
+    <label>Дата:</label>
+    <input type="date" name="date" required><br><br>
+
+    <button type="submit">Запиши упражнение</button>
+</form>
+
+<br><br>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">🚪 Изход</button>
+</form>
+
+</body>
+</html>
