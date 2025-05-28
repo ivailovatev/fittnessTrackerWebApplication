@@ -21,17 +21,24 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .headers(headers -> headers.disable()) // ⛳ Деактивира всички заглавни политики (вкл. frameOptions)
+                .headers(headers -> headers.frameOptions().disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/register",
                                 "/login",
+                                "/logout",
                                 "/exercises",
+                                "/exercises/",
                                 "/exercises/add",
-                                "/h2-console/**",
                                 "/exercises/delete/**",
-                                "/logout"
+                                "/exercises/edit",
+                                "/exercises/edit/**",
+                                "/h2-console/**",
+                                "/static/**",
+                                "/edit-exercise.html",
+                                "/index.html",
+                                "/"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -39,6 +46,8 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

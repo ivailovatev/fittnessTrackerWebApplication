@@ -23,9 +23,12 @@
         <td th:text="${exercise.repetitions}">Повторения</td>
         <td th:text="${exercise.date}">Дата</td>
         <td>
-            <form th:action="@{/exercises/delete/{id}(id=${exercise.id}, token=${token})}" method="post">
+            <form th:action="@{/exercises/delete/{id}(id=${exercise.id}, token=${token})}" method="post" style="display:inline">
                 <button type="submit">🗑</button>
             </form>
+            <a th:href="@{'/exercises/edit'(id=${exercise.id})}" style="display:inline">
+                <button type="button">✏</button>
+            </a>
         </td>
     </tr>
     </tbody>

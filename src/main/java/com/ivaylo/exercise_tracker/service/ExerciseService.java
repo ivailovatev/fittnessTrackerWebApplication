@@ -6,6 +6,7 @@ import com.ivaylo.exercise_tracker.entity.Exercise;
 import com.ivaylo.exercise_tracker.entity.User;
 import com.ivaylo.exercise_tracker.repository.ExerciseRepository;
 import com.ivaylo.exercise_tracker.repository.UserRepository;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Builder
 @Service
 public class ExerciseService {
 
@@ -60,5 +61,28 @@ public class ExerciseService {
                 .build();
         exerciseRepository.save(exercise);
     }
+    public void updateExercise(Long id, ExerciseRequest request) {
+        Exercise exercise = exerciseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+
+        exercise.setName(request.getName());
+        exercise.setRepetitions(request.getRepetitions());
+        exercise.setDate(request.getDate());
+
+        exerciseRepository.save(exercise);
+    }
+
+    public ExerciseResponse getExerciseById(Long id) {
+        Exercise exercise = exerciseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Упражнението не е намерено"));
+
+        return ExerciseResponse.builder()
+                .id(exercise.getId())
+                .name(exercise.getName())
+                .repetitions(exercise.getRepetitions())
+                .date(exercise.getDate())
+                .build();
+    }
+
 
 }
