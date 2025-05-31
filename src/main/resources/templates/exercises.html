@@ -129,6 +129,48 @@
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split("T")[0];
+        const dates = Array.from(document.querySelectorAll("td:nth-child(3)")).map(td => td.textContent.trim());
+        const hasTrainingToday = dates.includes(today);
+
+        if (hasTrainingToday) {
+            if ("Notification" in window) {
+                if (Notification.permission === "granted") {
+                    showTrainingNotification();
+                } else if (Notification.permission !== "denied") {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === "granted") {
+                            showTrainingNotification();
+                        } else {
+                            showFallbackBanner();
+                        }
+                    });
+                } else {
+                    showFallbackBanner();
+                }
+            } else {
+                showFallbackBanner();
+            }
+        }
+
+        function showTrainingNotification() {
+            new Notification("🏋️ Време е за тренировка!", {
+                body: "🔥 Давай, не го отлагай! Тялото ти ще ти благодари 💪",
+                icon: "https://cdn-icons-png.flaticon.com/512/1048/1048953.png" // фитнес икона
+            });
+        }
+
+        function showFallbackBanner() {
+            const alertBox = document.getElementById("training-alert");
+            if (alertBox) {
+                alertBox.classList.remove("d-none");
+            }
+        }
+    });
+</script>
+
 
 </body>
 </html>
